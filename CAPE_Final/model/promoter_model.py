@@ -66,9 +66,9 @@ class PrompterModel(nn.Module):
                  attn_dropout_transformer,
                  ff_dropout_transformer,
                  dropout_CNN,
-                 mat_size):
+                 mat_size,
+                 seq_len):
         super().__init__()
-
         self.embeds_seq = nn.Linear(input_dim, embedding_dim)
         a = dropout_CNN
         Final_channel = 16 
@@ -85,7 +85,9 @@ class PrompterModel(nn.Module):
                 Residual(PreNorm(embedding_dim, FeedForward(embedding_dim, dropout = ff_dropout_transformer))),
             ]))
 
-        self.output_layer = nn.Sequential(nn.Linear(Final_channel * mat_size * mat_size + 48 * embedding_dim, 1))
+        self.output_layer = nn.Sequential(nn.Linear(Final_channel * mat_size * mat_size + seq_len * embedding_dim, 1))
+        # self.output_layer = nn.Sequential(nn.Linear(Final_channel * mat_size * mat_size + 48 * embedding_dim, 1))
+
         # self.output_layer = nn.Sequential(nn.Linear(Final_channel * mat_size * mat_size, 1))
         # self.output_layer = nn.Sequential(nn.Linear(48 * embedding_dim, 1))
 
